@@ -1,2 +1,22 @@
 # ACMEbot
+
 ACMEbot remotely controllable rover
+
+
+## Preparing Raspberry Pi 4
+
+The first step is to install the **Ubuntu Server** and pre-configure it according to the [instructions](https://github.com/VVakko/acmebot/wiki/Software) from the wiki.
+
+
+## Initial Preparing ACMEbot
+
+```sh
+# Clone ACMEbot repository
+$ sudo mkdir /opt/acmebot
+$ sudo chown `whoami`: -R /opt/acmebot/
+$ git clone https://github.com/VVakko/acmebot.git /opt/acmebot/
+$ cd /opt/acmebot/
+$ sudo make apt-deps-install
+$ make venv-init
+$ make venv-deps-upgrade
+```

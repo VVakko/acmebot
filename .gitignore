@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files / C extensions / Translations
+__pycache__/
+__pypackages__/
+*$py.class
+*.py[cod]
+*.so
+*.mo
+*.pot
+
+# Unit test / coverage reports
+.pytest_cache/
+.coverage
+coverage
+.cache
+cache
+
+# Flask stuff
+.webassets-cache
+instance/
+
+# Editors
+.vscode/
+
+# Environments
+.env
+.env.bak
+.venv/
+.venv.bak/
+docker.env
+
+# Data Files
+data/*
+!data/.gitkeep
+
+# Log Files
+logs/*
+!logs/.gitkeep
+*.log
+
+# SQLite databases
+*.sqlite*

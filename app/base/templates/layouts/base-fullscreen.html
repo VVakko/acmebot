@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}ACMEbot{% endblock %}</title>
+
+    <!-- Favicons for different platforms -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/favicons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicons/favicon.svg') }}">
+    <link rel="mask-icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicons/favicon.svg') }}" color="#000000">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicons/favicon.ico') }}">
+
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock body_class %}">
+{% block content %}{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
+</body>
+</html>

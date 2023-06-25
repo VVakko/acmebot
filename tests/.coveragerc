@@ -2,7 +2,7 @@
 data_file = tests/.coverage
 source =
     app
-    main
+    config
     tests
 
 [report]

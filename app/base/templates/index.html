@@ -1,0 +1,44 @@
+{% extends 'layouts/base-fullscreen.html' %}
+
+{% block title %}ACMEbot{% endblock %}
+
+{% block content %}
+<div id="xPanelLeft">
+    <div data-control-type="button" data-control-id="0"></div>
+    <div data-control-type="button" data-control-id="1"></div>
+    <div data-control-type="button" data-control-id="2"></div>
+    <div data-control-type="button" data-control-id="3"></div>
+    <div data-control-type="button" data-control-id="4"></div>
+    <div data-control-type="button" data-control-id="5"></div>
+    <div data-control-type="button" data-control-id="6"></div>
+    <div data-control-type="button" data-control-id="7"></div>
+    <div data-control-type="axis" data-control-id="0"></div>
+    <div data-control-type="axis" data-control-id="1"></div>
+    <div data-control-type="stick" data-control-id="left"></div>
+</div>
+
+<div id="xPanelMiddle">
+    <div class="info">
+        <h2 id="heading"></h2>
+        <p id="message"></p>
+    </div>
+</div>
+
+<div id="xPanelRight">
+    <div data-control-type="button" data-control-id="8"></div>
+    <div data-control-type="button" data-control-id="9"></div>
+    <div data-control-type="button" data-control-id="10"></div>
+    <div data-control-type="button" data-control-id="11"></div>
+    <div data-control-type="button" data-control-id="12"></div>
+    <div data-control-type="button" data-control-id="13"></div>
+    <div data-control-type="button" data-control-id="14"></div>
+    <div data-control-type="button" data-control-id="15"></div>
+    <div data-control-type="axis" data-control-id="2"></div>
+    <div data-control-type="axis" data-control-id="3"></div>
+    <div data-control-type="stick" data-control-id="right"></div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}" type="module"></script>
+{% endblock javascripts %}

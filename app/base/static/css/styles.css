@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    box-sizing: border-box;
+    font-family: "Roboto", Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.35;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+#xPanelLeft {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 12.5vw;
+    position: absolute;
+    text-align: center;
+}
+
+#xPanelRight {
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 12.5vw;
+    position: absolute;
+    text-align: center;
+}
+
+#xPanelMiddle {
+    background-color: lightyellow;
+    height: 100%;
+    margin-left: 12.5vw;
+    margin-right: 12.5vw;
+}
+
+.gamepad-control {
+    display: inline-flex;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.gamepad-control > svg {
+    background: rgba(5, 50, 100, 0.1);
+    margin-right: 5px;
+    height: 35px;
+    width: 5px;
+    position: relative;
+}
+
+.gamepad-control[data-control-type="axis"] {
+    width: 75px;
+}
+
+.gamepad-control[data-control-type="axis"] > div > .value {
+    min-width: 60px;
+    text-align: right;
+}
+
+.gamepad-control[data-control-type="button"] {
+    width: 35px;
+}
+
+.gamepad-control[data-control-type="button"] > svg {
+    height: 17.5px;
+}
+
+.gamepad-control > div > .label {
+    color: rgb(5, 51, 97);
+    font-size: 75%;
+    opacity: 0.6;
+}
+
+.gamepad-control > div > .value {
+    display: block;
+    font-size: 90%;
+    margin-top: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+}

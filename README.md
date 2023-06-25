@@ -18,5 +18,5 @@ $ git clone https://github.com/VVakko/acmebot.git /opt/acmebot/
 $ cd /opt/acmebot/
 $ sudo make apt-deps-install
 $ make venv-init
-$ make venv-deps-upgrade
+$ make venv-deps-install
 ```

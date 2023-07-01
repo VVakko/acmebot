@@ -1,9 +1,13 @@
 from importlib import import_module
 from flask import Flask
+from flask_socketio import SocketIO
 from werkzeug.exceptions import default_exceptions
 
 from app import cli
 from config import get_config
+
+
+socketio = SocketIO()
 
 
 def register_extensions(app):  # pylint: disable=unused-argument
@@ -12,6 +16,7 @@ def register_extensions(app):  # pylint: disable=unused-argument
     :param app: Flask application.
     :type app: :class:`flask.Flask`
     '''
+    socketio.init_app(app, cors_allowed_origins="*")
 
 
 def register_blueprints(app):

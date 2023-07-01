@@ -1,14 +1,33 @@
 import "./joypad.min.js";
 import "./nipplejs.min.js";
+import "./socket.io.min.js";
 const gamepadControls = {};
 const nippleControls = {};
+const controlLastStates = {};
+const socket = io();
+
+
+function initializeSocketIO() {
+    socket.on("connect", () => {
+        let heading = document.getElementById('heading_socket');
+        const message = "WebSocket is connected";
+        heading.innerText = ''; //message;
+        console.log(message);
+    });
+    
+    socket.on("disconnect", () => {
+        let heading = document.getElementById('heading_socket');
+        const message = "WebSocket is disconnected";
+        heading.innerText = message;
+        console.log(message);
+    });
+}
 
 function initializeGamepadControls() {
     let controlType = '';
 
     controlType = 'stick';
-    for (let element of document
-            .querySelectorAll(`[data-control-type="${controlType}"]`)) {
+    for (let element of document.querySelectorAll(`[data-control-type="${controlType}"]`)) {
         let id = element.getAttribute('data-control-id');
         if (id === null) continue;
 
@@ -35,8 +54,7 @@ function initializeGamepadControls() {
     }
 
     controlType = 'axis';
-    for (let element of document
-            .querySelectorAll(`[data-control-type="${controlType}"]`)) {
+    for (let element of document.querySelectorAll(`[data-control-type="${controlType}"]`)) {
         let id = element.getAttribute('data-control-id');
         if (id === null) continue;
 
@@ -64,8 +82,7 @@ function initializeGamepadControls() {
     }
 
     controlType = 'button';
-    for (let element of document
-            .querySelectorAll(`[data-control-type="${controlType}"]`)) {
+    for (let element of document.querySelectorAll(`[data-control-type="${controlType}"]`)) {
         let id = element.getAttribute('data-control-id');
         if (id === null) continue;
 
@@ -90,20 +107,20 @@ function initializeGamepadControls() {
         // Set control value
         setGamepadControlValue(`${controlType}-${id}`, 0.0);
     }
-};
+}
 
 function initializeJoyPadModule() {
-    let heading = document.getElementById('heading');
-    let message = document.getElementById('message');
+    let heading = document.getElementById('heading_gamepad');
+    let message = document.getElementById('message_gamepad');
 
     function resetInfo(e) {
-        heading.innerText = 'No controller connected!';
-        message.innerText = 'Please connect a controller and press any key to start.';
+        heading.innerText = 'No gamepad connected!';
+        message.innerText = 'Please connect a gamepad and press any key to start.';
     };
 
     function updateInfo(e) {
         const { gamepad } = e;
-        heading.innerText = 'Controller connected!';
+        heading.innerText = ''; //'Gamepad connected!';
         message.innerText = gamepad.id;
     };
 
@@ -121,7 +138,10 @@ function initializeJoyPadModule() {
     });
     joypad.on('axis_move', e => {
         const { axis, axisMovementValue } = e.detail;
-        setGamepadControlValue(`axis-${axis}`, axisMovementValue);
+        const axis_minimal_value = 0.00005;
+        let value = Math.round(axisMovementValue * 100000) / 100000;
+        if (Math.abs(value) < axis_minimal_value) value = 0;
+        setGamepadControlValue(`axis-${axis}`, value);
     });
     joypad.on('button_press', (e) => {
         const { index } = e.detail;
@@ -147,8 +167,6 @@ function initializeNippleJSControls() {
         )
         if (!element) continue;
 
-        nippleControls[`${id}-state`] = { x: 0, y: 0, }
-        nippleControls[`${id}-state-last`] = '';
         nippleControls[id] = nipplejs.create(Object.assign({}, options, { zone: element }));
         nippleControls[id].on("move end", (evt, data) => {
             let id = evt.target.options.zone.getAttribute('data-control-id');
@@ -156,26 +174,14 @@ function initializeNippleJSControls() {
             let id_y = (id === 'left') ? '1' : '3';
             let x = 0, y = 0;
             if (evt.type == 'move') {
-                x = data.vector.x;
-                y = -data.vector.y;
+                x = Math.round(data.vector.x * 100000) / 100000;
+                y = -Math.round(data.vector.y * 100000) / 100000;
             }
 
             setGamepadControlValue(`axis-${id_x}`, x);
             setGamepadControlValue(`axis-${id_y}`, y);
-            nippleControls[`${id}-state`] = { x, y }
         });
     }
-
-    setInterval(() => {
-        for (const id of ['left', 'right']) {
-            let _ = JSON.stringify(nippleControls[`${id}-state`]);
-            if (nippleControls[`${id}-state-last`] !== _) {
-                nippleControls[`${id}-state-last`] = _;
-                console.log(nippleControls[`${id}-state`]);
-                //socket.send(`move ${id} ${x} ${y}`)
-            }
-        }
-    }, 100);
 
     function resizeNippleJSControls() {
         if (!window.nipplejs) return;
@@ -244,7 +250,24 @@ function setGamepadControlValue(control_id, value_) {
             ?.getElementsByTagName('line')[0]
             ?.setAttribute('y2', 17.5 * (1 - value));
     }
-};
+
+    sendSocketControlMessage(control_id, value);
+}
+
+function sendSocketControlMessage(control_name, value) {
+    const axis_significant_decimals = 3;
+    let message = {}
+    message[control_name] = value;
+    if (String(control_name).startsWith('axis')) {
+        message[control_name] = (
+            Math.round(value * Math.pow(10, axis_significant_decimals)) /
+            Math.pow(10, axis_significant_decimals)
+        );
+    }
+    if (controlLastStates[control_name] === message[control_name]) return;
+    controlLastStates[control_name] = message[control_name];
+    socket.send(message);
+}
 
 function updateGamepadStickValue(control_id) {
     if (!control_id || !gamepadControls[control_id]) return;
@@ -268,6 +291,7 @@ function updateGamepadStickValue(control_id) {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
+    initializeSocketIO();
     initializeGamepadControls();
     initializeJoyPadModule();
     initializeNippleJSControls();

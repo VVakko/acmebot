@@ -19,6 +19,9 @@ $ cd /opt/acmebot/
 $ sudo make apt-deps-install
 $ make venv-init
 $ make venv-deps-install
+
+# Run ACMEbot application
+$ make run
 ```
 
 
@@ -29,6 +32,8 @@ $ make venv-deps-install
 For gamepad interactions [joypad.js](https://github.com/ArunMichaelDsouza/joypad.js) (MIT Licensed)
 
 For touchscreen controls [nipplejs](https://yoannmoi.net/nipplejs/) (MIT Licensed)
+
+For socket communications [socket.io](https://socket.io/) (MIT Licensed)
 
 
 # License

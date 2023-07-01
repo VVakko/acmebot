@@ -1,9 +1,10 @@
+from pathlib import Path
 from flask import (
     abort, current_app, render_template, request, send_from_directory
 )
 from jinja2 import TemplateNotFound
-from pathlib import Path
 
+from app import socketio
 from app.base import blueprint
 
 
@@ -32,6 +33,23 @@ def route_template(template):
         return abort(404)
     except:
         return abort(500)
+
+
+@socketio.on('connect')
+def connect():
+    current_app.logger.debug("WebSocket is connected")
+
+
+@socketio.on('disconnect')
+def disconnect():
+    current_app.logger.debug("WebSocket is disconnected")
+
+
+@socketio.on('message')
+def message(data):
+    if not data:
+        return
+    current_app.logger.debug(data)
 
 
 # Helper - Extract current page name from request.

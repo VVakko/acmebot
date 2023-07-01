@@ -1,5 +1,7 @@
 import "./joypad.min.js";
+import "./nipplejs.min.js";
 const gamepadControls = {};
+const nippleControls = {};
 
 function initializeGamepadControls() {
     let controlType = '';
@@ -131,6 +133,62 @@ function initializeJoyPadModule() {
     });
 }
 
+function initializeNippleJSControls() {
+    let options = {
+        color: 'none',
+        mode: 'static',
+        position: { left: '50%', top: '48.5%' },
+        shape: 'square',
+    };
+
+    for (const id of ['left', 'right']) {
+        let element = document.querySelector(
+            `[data-control-type="stick"][data-control-id="${id}"]`
+        )
+        if (!element) continue;
+
+        nippleControls[`${id}-state`] = { x: 0, y: 0, }
+        nippleControls[`${id}-state-last`] = '';
+        nippleControls[id] = nipplejs.create(Object.assign({}, options, { zone: element }));
+        nippleControls[id].on("move end", (evt, data) => {
+            let id = evt.target.options.zone.getAttribute('data-control-id');
+            let id_x = (id === 'left') ? '0' : '2';
+            let id_y = (id === 'left') ? '1' : '3';
+            let x = 0, y = 0;
+            if (evt.type == 'move') {
+                x = data.vector.x;
+                y = -data.vector.y;
+            }
+
+            setGamepadControlValue(`axis-${id_x}`, x);
+            setGamepadControlValue(`axis-${id_y}`, y);
+            nippleControls[`${id}-state`] = { x, y }
+        });
+    }
+
+    setInterval(() => {
+        for (const id of ['left', 'right']) {
+            let _ = JSON.stringify(nippleControls[`${id}-state`]);
+            if (nippleControls[`${id}-state-last`] !== _) {
+                nippleControls[`${id}-state-last`] = _;
+                console.log(nippleControls[`${id}-state`]);
+                //socket.send(`move ${id} ${x} ${y}`)
+            }
+        }
+    }, 100);
+
+    function resizeNippleJSControls() {
+        if (!window.nipplejs) return;
+        for (const id of window.nipplejs.factory) {
+            id[0].options.size = id[0].ui.back.clientWidth;
+        }
+    }
+    // Resize sizes of all NippleJS after initialization
+    resizeNippleJSControls();
+    // Automatically change the sizes of all NippleJS after changing the size of the browser
+    window.addEventListener('resize', resizeNippleJSControls);
+}
+
 function initializeTesting() {
     //return;
     // Set random values for axis and button controls
@@ -212,5 +270,6 @@ function updateGamepadStickValue(control_id) {
 document.addEventListener("DOMContentLoaded", function(event) {
     initializeGamepadControls();
     initializeJoyPadModule();
+    initializeNippleJSControls();
     //initializeTesting();
 });

@@ -11,7 +11,7 @@ The first step is to install the **Ubuntu Server** and pre-configure it accordin
 ## Initial Preparing ACMEbot
 
 ```sh
-# Clone ACMEbot repository
+# Clone and initialize ACMEbot repository
 $ sudo mkdir /opt/acmebot
 $ sudo chown `whoami`: -R /opt/acmebot/
 $ git clone https://github.com/VVakko/acmebot.git /opt/acmebot/
@@ -20,3 +20,16 @@ $ sudo make apt-deps-install
 $ make venv-init
 $ make venv-deps-install
 ```
+
+
+# Libraries 
+
+## JavaScript
+
+For gamepad interactions [joypad.js](https://github.com/ArunMichaelDsouza/joypad.js) (MIT Licensed)
+For touchscreen controls [nipplejs](https://yoannmoi.net/nipplejs/) (MIT Licensed)
+
+
+# License
+
+All libraries have his own license, my code and documentation is GPLv3 Licensed.

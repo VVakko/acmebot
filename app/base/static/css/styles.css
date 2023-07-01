@@ -82,3 +82,21 @@ body {
     overflow: hidden;
     white-space: nowrap;
 }
+
+div[data-control-type="stick"] {
+    position: relative;
+}
+
+div.nipple > div.back {
+    width: 12.5vw !important;
+    height: 12.5vw !important;
+    margin-left: -6.25vw !important;
+    margin-top: -6.25vw !important;
+}
+
+div.nipple > div.front {
+    width: 6.25vw !important;
+    height: 6.25vw !important;
+    margin-left: -3.125vw !important;
+    margin-top: -3.125vw !important;
+}

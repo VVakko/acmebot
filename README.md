@@ -27,6 +27,7 @@ $ make venv-deps-install
 ## JavaScript
 
 For gamepad interactions [joypad.js](https://github.com/ArunMichaelDsouza/joypad.js) (MIT Licensed)
+
 For touchscreen controls [nipplejs](https://yoannmoi.net/nipplejs/) (MIT Licensed)
 
 
